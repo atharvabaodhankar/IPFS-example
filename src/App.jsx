@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useState } from "react";
 import axios from "axios";
 
@@ -16,7 +15,6 @@ function App() {
 
     const formData = new FormData();
     formData.append("file", file);
-
     setUploading(true);
 
     try {
@@ -24,8 +22,7 @@ function App() {
         maxBodyLength: "Infinity",
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${import.meta.env.VITE_PINATA_JWT}`
-
+          Authorization: `Bearer ${import.meta.env.VITE_PINATA_JWT}`,
         },
       });
 
@@ -39,25 +36,42 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>IPFS File Uploader (Pinata)</h1>
-      <input type="file" onChange={handleFileChange} />
-      <br />
-      <button onClick={handleUpload} disabled={uploading}>
-        {uploading ? "Uploading..." : "Upload to IPFS"}
-      </button>
-      {ipfsHash && (
-        <div style={{ marginTop: "1rem" }}>
-          <p><strong>IPFS CID:</strong> {ipfsHash}</p>
-          <a
-            href={`https://gateway.pinata.cloud/ipfs/${ipfsHash}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View File
-          </a>
-        </div>
-      )}
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full">
+        <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">📁 IPFS File Uploader</h1>
+
+        <input
+          type="file"
+          onChange={handleFileChange}
+          className="w-full mb-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-lg file:bg-white file:text-gray-700 file:cursor-pointer"
+        />
+
+        <button
+          onClick={handleUpload}
+          disabled={uploading}
+          className={`w-full py-2 rounded-lg text-white font-semibold transition ${
+            uploading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}
+        >
+          {uploading ? "Uploading..." : "Upload to IPFS"}
+        </button>
+
+        {ipfsHash && (
+          <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <p className="text-sm text-gray-700 break-all">
+              <span className="font-medium text-gray-900">IPFS CID:</span> {ipfsHash}
+            </p>
+            <a
+              href={`https://gateway.pinata.cloud/ipfs/${ipfsHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block text-blue-600 hover:underline text-sm"
+            >
+              🔗 View File on IPFS
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
